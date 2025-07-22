@@ -15,6 +15,7 @@ class Tetris {
         this.level = 1;
         this.gameStatus = "S";
         this.timeoutId;
+        this.bag = [];
 
         window.onkeydown = (e) => {
             console.log(e.keyCode);
@@ -154,6 +155,21 @@ class Tetris {
         return blocks;
     }
 
+    createNewBag() {
+        for (let i = 0; i < 7; i++) {
+            this.bag.push(i);
+        }
+        this.shuffleBag();
+    }
+
+    shuffleBag() {
+        for (let i = this.bag.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            [this.bag[i], this.bag[j]] = [this.bag[j], this.bag[i]];
+        }
+    }
+
+
     drawBlock(x, y, type, angle, canvas, alpha = 1.0) {
         let context = canvas.getContext("2d");
         let block = this.blocks[type];
@@ -265,7 +281,10 @@ class Tetris {
     }
 
     getRandomBlock() {
-        return  Math.floor(Math.random() * 7);
+        if (this.bag.length === 0) {
+            this.createNewBag();
+        }
+        return this.bag.pop();
     }
 
     getGhostBlock(x,y,type,angle) {

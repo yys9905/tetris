@@ -1,18 +1,20 @@
 html {
     touch-action: manipulation;
 }
-
+body {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+}
 .wrapper-container {
     display: inline-block;
 }
-
 .tetris-container {
     display: flex;
     flex-direction: row;
     margin: 10px;
     background-color: #333333;
 }
-
 .tetris-panel-container {
     display: flex;
     padding-left: 10px;
@@ -21,21 +23,17 @@ html {
     color: white;
     background-color: #333333;
 }
-
 .tetris-panel-container-padding {
     flex-grow: 1;
 }
-
 .tetris-panel-container p {
    margin: 0;
    padding: 0;
 }
-
 .tetris-button-panel {
     border-style: none;
     width: 100%;
 }
-
 .tetris-button {
     padding-top: 10px;
     padding-bottom: 10px;
@@ -62,30 +60,27 @@ html {
     font-size: 12px;
 }
 
-/* ===================== flex 메인 레이아웃 및 안내 패널 스타일 ===================== */
+/* flex 메인 레이아웃 */
 .main-flex-container {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 32px; /* 게임판과 안내 텍스트 사이 간격 */
+  gap: 32px;
   min-height: 100vh;
   background: #fff;
 }
-
 .left-game-area {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
 }
-
 .side-info {
   min-width: 210px;
   max-width: 300px;
   margin-top: 20px;
 }
-
 .side-info h2 {
   margin-bottom: 8px;
   margin-top: 20px;
@@ -107,7 +102,7 @@ html {
   color: #888;
 }
 
-/* ===================== 모바일(800px 이하)에서만 적용되는 스타일 ===================== */
+/* 모바일에서는 안내 패널 등만 숨기고, 게임 크기는 그대로 중앙 정렬 */
 @media (max-width: 800px) {
   html, body {
     background: #222 !important;
@@ -116,65 +111,28 @@ html {
     overscroll-behavior: none !important;
   }
   .main-flex-container {
-    flex-direction: row;
-    align-items: stretch;
-    justify-content: center;
-    gap: 0;
     min-height: 100vh;
+    justify-content: center !important;
+    align-items: center !important;
     background: #222 !important;
   }
   .side-info, h1, .textlocation {
     display: none !important;
   }
-  .wrapper-container, .tetris-container {
-    width: 100vw !important;
-    height: 100vh !important;
-    max-width: 100vw !important;
-    max-height: 100vh !important;
+  .left-game-area {
+    margin: 0 auto !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: auto !important;
+  }
+  .wrapper-container,
+  .tetris-container {
+    margin: 0 !important;
+    padding: 0 !important;
     display: flex;
     align-items: center;
     justify-content: center;
+    /* 고정 크기(캔버스, 패널)는 그대로! */
   }
-  #stage {
-    width: 60vw !important;
-    height: 100vh !important;
-    min-width: 100px;
-    min-height: 180px;
-    display: block;
-    background: black;
-  }
-  .tetris-panel-container {
-    width: 40vw !important;
-    min-width: 110px;
-    height: 100vh !important;
-    background: #333;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 0 !important;
-  }
-  .tetris-button-panel {
-    width: 100% !important;
-    max-width: 220px !important;
-    margin: 0 auto 10px auto !important;
-  }
-  .tetris-button {
-    font-size: 1.2em !important;
-    padding: 12px 0 !important;
-  }
-  .tetris-panel-container > p:first-child {
-    margin-top: 16px;
-    color: #eee;
-    font-size: 1.2em;
-    text-align: center;
-    display: block !important;
-  }
-  #next {
-    display: block !important;
-    margin: 10px auto 20px auto;
-    width: 90% !important;
-    height: auto !important;
-    background: black;
-  }
+  /* stage, next 등은 크기 건드리지 않음! */
 }

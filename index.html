@@ -1,122 +1,137 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <title>Tetris</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-  <link rel="stylesheet" type="text/css" href="tetris.css">
-  <script type="text/javascript" src="tetris.js"></script>
-</head>
-<body>
-  <div class="main-flex-container">
-    <div class="left-game-area">
-      <div class="wrapper-container">
-        <span class="tetris-container">
-          <canvas id="stage" width="250" height="500" style="background-color:black;"></canvas>
-          <span class="tetris-panel-container">
-            <p>Next:</p>
-            <canvas id="next" width="150" height="150" style="background-color:black;"></canvas>
-            <p>Lines:<span id="lines">0</span></p>
-            <p>Level:<span id="level">1</span></p>
-            <p><span id="message"></span></p>
-            <div class="tetris-panel-container-padding"></div>
-            <table class="tetris-button-panel">
-              <tr>
-                <td id="tetris-pause-button" class="tetris-button">P</td>
-                <td></td>
-                <td id="tetris-reset-button" class="tetris-button">R</td>
-              </tr>
-              <tr>
-                <td></td>
-                <td id="tetris-rotate-button" class="tetris-button">↻</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td id="tetris-move-left-button"class="tetris-button">←</td>
-                <td id="tetris-down-button"class="tetris-button">↓</td>
-                <td id="tetris-move-right-button"class="tetris-button">→</td>
-              </tr>
-              <tr>
-                <td colspan="3" id="tetris-fall-button" class="tetris-button">Space</td>
-              </tr>
-            </table>
-          </span>
-        </span>
-      </div>
-      <p class="textlocation">made by ys</p>
-    </div>
-    <div class="side-info">
-      <h2 class="mouseOn" onclick="control()">조작법</h2>
-      <div id="controlTextContent" style="display: block">
-        <p class="content">← : 왼쪽으로 이동</p>
-        <p class="content">→ : 오른쪽으로 이동</p>
-        <p class="content">↑ : 회전</p>
-        <p class="content">↓ : 아래로 한칸 이동</p>
-        <p class="content">Space : 아래로 빠르게 이동</p>
-        <p class="content">Esc/P : 정지/시작</p>
-        <p class="content">R : 게임 초기화</p>
-      </div>
-      <h2 class="mouseOn" onclick="update()">Update</h2>
-      <div id="updateTextContent" style="display: none">
-        <p class="upDate" onclick="upText()">22.02.08</p>
-        <div id = "firstUp" style="display: none">
-          <p class="title">@ 부숴진 라인의 수에 따른 레벨시스템 추가</p>
-          <p class="content">    * line 20 -> 1Lv</p>
-          <p class="title">@ 레벨에 따른 속도증가 시스템 추가</p>
-          <p class="content">    * 속도 증가 최대레벨 20Lv</p>
-        </div>
-        <hr>
-        <p class="mouseOn" onclick="upText2()">25.07.22</p>
-        <div id = "secondUp" style="display: none">
-          <p class="title">@ 편의성 개선</p>
-          <p class="content">    * NextBlock 가운데 정렬</p>
-          <p class="content">    * 아래로 한칸 이동 추가</p>
-          <p class="content">    * 착지 예상 위치 추가</p>
-          <p class="title">@ 오류 수정</p>
-          <p class="content">    * 정지시 한틱 더 이동하던 현상 수정</p>
-          <p class="content">    * 블록 생성 전 이동시 오류 띄우던 현상 수정</p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <script>
-    function control() {
-      if (document.getElementById('controlTextContent').style.display == 'none') {
-        document.getElementById('updateTextContent').style.display = 'none';
-        document.getElementById('controlTextContent').style.display = 'block';
-      } else {
-        document.getElementById('controlTextContent').style.display = 'none';
+  <head>
+    <meta charset="UTF-8">
+    <title>Tetris</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="tetris.css">
+    <script type="text/javascript" src="tetris.js"></script>
+  </head>
+  <body>
+    <table>
+      <tr>
+        <td>
+          <h1>테트리스</h1>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div class="wrapper-container">
+              <span class="tetris-container">
+                  <canvas id="stage" width="250px" height="500px" style="background-color:black;">
+                  </canvas>
+                  <span class="tetris-panel-container">
+                    <p>Next:</p>
+                      <canvas id="next" width="150px" height="150px" style="background-color:black;">
+                      </canvas>
+                    <p>Lines:<span id="lines">0</span></p>
+                    <p>Level:<span id="level">1</span></p>
+                    <!-- <p>speed:<span id="spd">1050</span></p> -->
+                    <p><span id="message"></span></p>
+                    <div class="tetris-panel-container-padding"></div>
+                    <table class="tetris-button-panel">
+                      <tr>
+                        <td id="tetris-pause-button" class="tetris-button">P</td>
+                        <td></td>
+                        <td id="tetris-reset-button" class="tetris-button">R</td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td id="tetris-rotate-button" class="tetris-button">↻</td>
+                        <td></td>
+                      </tr>
+                      <tr>
+                        <td id="tetris-move-left-button"class="tetris-button">←</td>
+                        <td id="tetris-down-button"class="tetris-button">↓</td>
+                        <td id="tetris-move-right-button"class="tetris-button">→</td>
+                      </tr>
+                      <tr>
+                        <td colspan="3" id="tetris-fall-button" class="tetris-button">Space</td>
+                      </tr>
+                    </table>
+                  </span>
+              </span>
+          </div>
+        </td>
+        <td>
+          <table>
+            <tr>
+              <h2 class="mouseOn" onclick="control()">조작법</h2>
+              <div id="controlTextContent" style="display: block">
+                <p class="content">← : 왼쪽으로 이동</p>
+                <p class="content">→ : 오른쪽으로 이동</p>
+                <p class="content">↑ : 회전</p>
+                <p class="content">↓ : 아래로 한칸 이동</p>
+                <p class="content">Space : 아래로 빠르게 이동</p>
+                <p class="content">Esc/P : 정지/시작</p>
+                <p class="content">R : 게임 초기화</p>
+              </div> 
+            </tr>
+            <tr>
+              <h2 class="mouseOn" onclick="update()">Update</h2>
+              <div id="updateTextContent" style="display: none">
+                <p class="upDate" onclick="upText()">22.02.08</p>
+                <div id = "firstUp" style="display: none">
+                  <p class="title">@ 부숴진 라인의 수에 따른 레벨시스템 추가</p>
+                  <p class="content">    * line 20 -> 1Lv</p>
+                  <p class="title">@ 레벨에 따른 속도증가 시스템 추가</p>
+                  <p class="content">    * 속도 증가 최대레벨 20Lv</p>
+                </div>
+                <hr>
+                <p class="mouseOn" onclick="upText2()">25.07.22</p>
+                <div id = "secondUp" style="display: none">
+                  <p class="title">@ 편의성 개선</p>
+                  <p class="content">    * NextBlock 가운데 정렬</p>
+                  <p class="content">    * 아래로 한칸 이동 추가</p>
+                  <p class="content">    * 착지 예상 위치 추가</p>
+                  <p class="title">@ 오류 수정</p>
+                  <p class="content">    * 정지시 한틱 더 이동하던 현상 수정</p>
+                  <p class="content">    * 블록 생성 전 이동시 오류 띄우던 현상 수정</p>
+                </div>
+              </div>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <p class="textlocation">made by ys</p>
+    <script>
+      function control() {
+        if (document.getElementById('controlTextContent').style.display == 'none') {
+          document.getElementById('updateTextContent').style.display = 'none';
+          document.getElementById('controlTextContent').style.display = 'block';
+        } else {
+          document.getElementById('controlTextContent').style.display = 'none';
+        }
       }
-    }
-    function update() {
-      if (document.getElementById('updateTextContent').style.display == 'none') {
-        document.getElementById('controlTextContent').style.display = 'none';
-        document.getElementById('firstUp').style.display = 'none';
-        document.getElementById('secondUp').style.display = 'none';
-        document.getElementById('updateTextContent').style.display = 'block';
-      } else {
-        document.getElementById('updateTextContent').style.display = 'none';
+      function update() {
+        if (document.getElementById('updateTextContent').style.display == 'none') {
+          document.getElementById('controlTextContent').style.display = 'none';
+          document.getElementById('firstUp').style.display = 'none';
+          document.getElementById('secondUp').style.display = 'none';
+          document.getElementById('updateTextContent').style.display = 'block';
+        } else {
+          document.getElementById('updateTextContent').style.display = 'none';
+        }
       }
-    }
-    function upText(){
-      if (document.getElementById('firstUp').style.display == 'none'){
-        document.getElementById('secondUp').style.display = 'none';
-        document.getElementById('firstUp').style.display = 'block';}
-      else{
-        document.getElementById('firstUp').style.display = 'none';
+      function upText(){
+        if (document.getElementById('firstUp').style.display == 'none'){
+          document.getElementById('secondUp').style.display = 'none';
+          document.getElementById('firstUp').style.display = 'block';}
+        else{
+          document.getElementById('firstUp').style.display = 'none';
+        }
       }
-    }
-    function upText2(){
-      if (document.getElementById('secondUp').style.display == 'none'){
-        document.getElementById('firstUp').style.display = 'none';
-        document.getElementById('secondUp').style.display = 'block';}
-      else{
-        document.getElementById('secondUp').style.display = 'none';
+      function upText2(){
+        if (document.getElementById('secondUp').style.display == 'none'){
+          document.getElementById('firstUp').style.display = 'none';
+          document.getElementById('secondUp').style.display = 'block';}
+        else{
+          document.getElementById('secondUp').style.display = 'none';
+        }
       }
-    }
-    var tetris = new Tetris();
-    tetris.startGame();
-    // (stage.width/height 절대 변경 금지!)
-  </script>
-</body>
+      var tetris = new Tetris();
+      tetris.startGame();
+    </script>
+  </body>
 </html>

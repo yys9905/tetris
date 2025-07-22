@@ -1,20 +1,18 @@
 html {
     touch-action: manipulation;
 }
-body {
-    margin: 0;
-    padding: 0;
-    background: #fff;
-}
+
 .wrapper-container {
     display: inline-block;
 }
+
 .tetris-container {
     display: flex;
     flex-direction: row;
     margin: 10px;
     background-color: #333333;
 }
+
 .tetris-panel-container {
     display: flex;
     padding-left: 10px;
@@ -23,17 +21,21 @@ body {
     color: white;
     background-color: #333333;
 }
+
 .tetris-panel-container-padding {
     flex-grow: 1;
 }
+
 .tetris-panel-container p {
    margin: 0;
    padding: 0;
 }
+
 .tetris-button-panel {
     border-style: none;
     width: 100%;
 }
+
 .tetris-button {
     padding-top: 10px;
     padding-bottom: 10px;
@@ -58,81 +60,4 @@ body {
 }
 .content {
     font-size: 12px;
-}
-
-/* flex 메인 레이아웃 */
-.main-flex-container {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 32px;
-  min-height: 100vh;
-  background: #fff;
-}
-.left-game-area {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-}
-.side-info {
-  min-width: 210px;
-  max-width: 300px;
-  margin-top: 20px;
-}
-.side-info h2 {
-  margin-bottom: 8px;
-  margin-top: 20px;
-}
-.side-info .content {
-  font-size: 14px;
-  margin-left: 8px;
-}
-.side-info .upDate,
-.side-info .title {
-  font-size: 14px;
-  margin-top: 4px;
-}
-.side-info hr {
-  margin: 8px 0;
-}
-.textlocation {
-  margin-top: 20px;
-  color: #888;
-}
-
-/* 모바일에서는 안내 패널 등만 숨기고, 게임 크기는 그대로 중앙 정렬 */
-@media (max-width: 800px) {
-  html, body {
-    background: #222 !important;
-    overflow: hidden !important;
-    touch-action: none !important;
-    overscroll-behavior: none !important;
-  }
-  .main-flex-container {
-    min-height: 100vh;
-    justify-content: center !important;
-    align-items: center !important;
-    background: #222 !important;
-  }
-  .side-info, h1, .textlocation {
-    display: none !important;
-  }
-  .left-game-area {
-    margin: 0 auto !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: auto !important;
-  }
-  .wrapper-container,
-  .tetris-container {
-    margin: 0 !important;
-    padding: 0 !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* 고정 크기(캔버스, 패널)는 그대로! */
-  }
-  /* stage, next 등은 크기 건드리지 않음! */
 }

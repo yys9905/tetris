@@ -356,6 +356,7 @@ class Tetris {
     pause(){
         if(this.gameStatus === "S"){
             this.gameStatus = "P";
+            clearTimeout(this.timeoutId);
         }else{
             this.gameStatus = "S";
             this.mainLoop();
@@ -377,6 +378,7 @@ class Tetris {
         this.gameSpeed = 1050;
         this.level = 1;
         this.gameStatus = "S";
+        document.getElementById("message").innerText = "";
         document.getElementById("lines").innerText = "" + this.deletedLines;
         document.getElementById("level").innerText = "" + this.level;
         this.startGame();

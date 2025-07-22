@@ -176,6 +176,9 @@ class Tetris {
     }
 
     mainLoop() {
+        if (this.gameStatus === "P") {
+        return;
+        }
         if (this.currentBlock == null) {
             if (!this.createNewBlock()) {
                 return;

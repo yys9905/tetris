@@ -3,9 +3,42 @@
   <head>
     <meta charset="UTF-8">
     <title>Tetris</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
     <link rel="stylesheet" type="text/css" href="tetris.css">
     <script type="text/javascript" src="tetris.js"></script>
+    <style>
+      /* 모바일 환경에서 불필요한 요소 숨기고 테트리스만 */
+      @media (max-width: 800px) {
+        body, html {
+          margin: 0 !important;
+          padding: 0 !important;
+          width: 100vw;
+          height: 100vh;
+          overflow: hidden;
+          background: #222;
+        }
+        h1, h2, .tetris-panel-container, .textlocation, 
+        #controlTextContent, #updateTextContent, 
+        table:not(:has(#stage)) {
+          display: none !important;
+        }
+        .wrapper-container, .tetris-container, #stage {
+          width: 100vw !important;
+          height: 100vh !important;
+          max-width: 100vw !important;
+          max-height: 100vh !important;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        #stage {
+          width: 100vw !important;
+          height: 100vh !important;
+          display: block;
+          background: black;
+        }
+      }
+    </style>
   </head>
   <body>
     <table>
@@ -26,7 +59,6 @@
                       </canvas>
                     <p>Lines:<span id="lines">0</span></p>
                     <p>Level:<span id="level">1</span></p>
-                    <!-- <p>speed:<span id="spd">1050</span></p> -->
                     <p><span id="message"></span></p>
                     <div class="tetris-panel-container-padding"></div>
                     <table class="tetris-button-panel">
@@ -132,6 +164,19 @@
       }
       var tetris = new Tetris();
       tetris.startGame();
+      window.tetris = tetris; // 전역 접근
+
+      // 모바일에서 캔버스가 꽉 차게
+      function resizeCanvasForMobile() {
+        if (window.innerWidth < 800) {
+          var stage = document.getElementById("stage");
+          stage.width = window.innerWidth;
+          stage.height = window.innerHeight;
+          if (window.tetris) tetris.reset();
+        }
+      }
+      window.addEventListener('resize', resizeCanvasForMobile);
+      window.addEventListener('DOMContentLoaded', resizeCanvasForMobile);
     </script>
   </body>
 </html>

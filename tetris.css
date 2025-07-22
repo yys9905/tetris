@@ -61,9 +61,15 @@ html {
 .content {
     font-size: 12px;
 }
-@media (max-width: 800px) {
+@media (max-width: 650px) {
   /* 오른쪽 내역 숨기기 */
   td:last-child {
+    display: none;
+  }
+}
+@media (max-height: 600px) {
+  /* 오른쪽 내역 숨기기 */
+  .textlocation {
     display: none;
   }
 }

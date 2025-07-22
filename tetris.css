@@ -50,7 +50,14 @@ html {
     right: 10px;
     bottom: 5px;
 }
-.upDate:hover {
+.mouseOn:hover {
     color: blue;
     cursor: pointer;
+}
+.title {
+    font-weight: bold;
+    font-size: 15px;
+}
+.content {
+    font-size: 12px;
 }

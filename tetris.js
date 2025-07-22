@@ -17,18 +17,33 @@ class Tetris {
         this.timeoutId;
 
         window.onkeydown = (e) => {
+            console.log(e.keyCode);
             if(this.gameStatus === "S"){
                 if (e.keyCode === 37) {
-                    this.moveLeft();
+                    if (this.currentBlock != null) {
+                        this.moveLeft();
+                    }
                 } else if (e.keyCode === 38) {
-                    this.rotate();
+                    if (this.currentBlock != null) {
+                        this.rotate();
+                    }
                 } else if (e.keyCode === 39) {
-                    this.moveRight();
+                    if (this.currentBlock != null) {
+                        this.moveRight();
+                    }
                 } else if (e.keyCode === 40) {
-                    this.fall();
-                } 
+                    if (this.currentBlock != null) {
+                        this.fallBlock();
+                        this.draw();
+                        this.timerReset();
+                    }
+                } else if (e.keyCode === 32) {
+                    if (this.currentBlock != null) {
+                        this.fall();
+                    }
+                }
             }
-            if (e.keyCode === 27) {
+            if (e.keyCode === 27 || e.keyCode === 80) {
                 this.pause();
             } else if (e.keyCode === 82) {
                 this.reset();
@@ -36,22 +51,29 @@ class Tetris {
         }
         
         document.getElementById("tetris-move-left-button").onmousedown = (e) => {
-            if(this.gameStatus === "S"){ 
+            if(this.gameStatus === "S" && this.currentBlock != null){ 
                 this.moveLeft();
             }
         }
         document.getElementById("tetris-rotate-button").onmousedown = (e) => {
-            if(this.gameStatus === "S"){ 
+            if(this.gameStatus === "S" && this.currentBlock != null){ 
                 this.rotate();
             }
         }
         document.getElementById("tetris-move-right-button").onmousedown = (e) => {
-            if(this.gameStatus === "S"){ 
+            if(this.gameStatus === "S" && this.currentBlock != null){ 
                 this.moveRight();
             }
         }
+        document.getElementById("tetris-down-button").onmousedown = (e) => {
+            if(this.gameStatus === "S" && this.currentBlock != null){ 
+                this.fallBlock();
+                this.draw();
+                this.timerReset();
+            }
+        }
         document.getElementById("tetris-fall-button").onmousedown = (e) => {
-            if(this.gameStatus === "S"){ 
+            if(this.gameStatus === "S" && this.currentBlock != null){ 
                 this.fall();
             }
         }
@@ -132,9 +154,11 @@ class Tetris {
         return blocks;
     }
 
-    drawBlock(x, y, type, angle, canvas) {
+    drawBlock(x, y, type, angle, canvas, alpha = 1.0) {
         let context = canvas.getContext("2d");
         let block = this.blocks[type];
+        context.save();
+        context.globalAlpha = alpha;
         for (let i = 0; i < block.shape[angle].length; i++) {
             this.drawCell(context,
                      x + (block.shape[angle][i][0] * this.cellSize),
@@ -142,6 +166,7 @@ class Tetris {
                      this.cellSize,
                      type);
         }
+        context.restore();
     }
     drawCell(context, cellX, cellY, cellSize, type) {
         let block = this.blocks[type];
@@ -164,6 +189,18 @@ class Tetris {
         context.stroke();
     }
 
+    draw() {
+        this.drawStage();
+        if (this.currentBlock != null) {
+            let ghostY = this.getGhostBlock(this.blockX, this.blockY, this.currentBlock, this.blockAngle);
+            this.drawBlock(this.stageLeftPadding + this.blockX * this.cellSize,
+                this.stageTopPadding + ghostY * this.cellSize,
+                this.currentBlock, this.blockAngle, this.stageCanvas, 0.3);
+            this.drawBlock(this.stageLeftPadding + this.blockX * this.cellSize,
+                this.stageTopPadding + this.blockY * this.cellSize,
+                this.currentBlock, this.blockAngle, this.stageCanvas);
+        }
+    }
     startGame() {
         let virtualStage = new Array(this.stageWidth);
         for (let i = 0; i < this.stageWidth; i++) {
@@ -184,15 +221,8 @@ class Tetris {
             } else {
                 this.fallBlock();
             }
-            this.drawStage();
-            if (this.currentBlock != null) {
-                this.drawBlock(this.stageLeftPadding + this.blockX * this.cellSize,
-                    this.stageTopPadding + this.blockY * this.cellSize,
-                    this.currentBlock, this.blockAngle, this.stageCanvas);
-            }
-            if (this.gameStatus == "S"){
-                this.timeoutId = setTimeout(this.mainLoop.bind(this), this.gameSpeed);
-            }  
+            this.draw();
+            this.timeoutId = setTimeout(this.mainLoop.bind(this), this.gameSpeed);
         }
     }
 
@@ -213,14 +243,37 @@ class Tetris {
 
     drawNextBlock() {
         this.clear(this.nextCanvas);
-        this.drawBlock(this.cellSize * 2, this.cellSize, this.nextBlock,
-            0, this.nextCanvas);
+        let block = this.blocks[this.nextBlock];
+        let shape = block.shape[0]; 
+
+        let minX = Math.min(...shape.map(cell => cell[0]));
+        let maxX = Math.max(...shape.map(cell => cell[0]));
+        let minY = Math.min(...shape.map(cell => cell[1]));
+        let maxY = Math.max(...shape.map(cell => cell[1]));
+
+        let blockWidth = maxX - minX + 1;
+        let blockHeight = maxY - minY + 1;
+
+        let previewCanvasSizeX = this.nextCanvas.width;
+        let previewCanvasSizeY = this.nextCanvas.height;
+
+        let startX = ((previewCanvasSizeX - blockWidth * this.cellSize) / 2) - (minX * this.cellSize);
+        let startY = ((previewCanvasSizeY - blockHeight * this.cellSize) / 2) - (minY * this.cellSize);
+
+
+        this.drawBlock(startX, startY, this.nextBlock, 0, this.nextCanvas);
     }
 
     getRandomBlock() {
         return  Math.floor(Math.random() * 7);
     }
 
+    getGhostBlock(x,y,type,angle) {
+        while (this.checkBlockMove(x, y + 1, type, angle)) {
+            y++;
+        }
+        return y
+    }
     fallBlock() {
         if (this.checkBlockMove(this.blockX, this.blockY + 1, this.currentBlock, this.blockAngle)) {
             this.blockY++;
@@ -343,11 +396,17 @@ class Tetris {
     }
 
     refreshStage() {
-      this.clear(this.stageCanvas);
-      this.drawStage();
-      this.drawBlock(this.stageLeftPadding + this.blockX * this.cellSize,
-                this.stageTopPadding + this.blockY * this.cellSize,
-                this.currentBlock, this.blockAngle, this.stageCanvas);
+        this.clear(this.stageCanvas);
+        this.drawStage();
+        if (this.currentBlock != null) {
+            let ghostY = this.getGhostBlock(this.blockX, this.blockY, this.currentBlock, this.blockAngle);
+            this.drawBlock(this.stageLeftPadding + this.blockX * this.cellSize,
+                           this.stageTopPadding + ghostY * this.cellSize,
+                           this.currentBlock, this.blockAngle, this.stageCanvas, 0.3);
+        }
+        this.drawBlock(this.stageLeftPadding + this.blockX * this.cellSize,
+                       this.stageTopPadding + this.blockY * this.cellSize,
+                       this.currentBlock, this.blockAngle, this.stageCanvas);
     }
 
     clear(canvas) {
@@ -384,5 +443,9 @@ class Tetris {
         document.getElementById("lines").innerText = "" + this.deletedLines;
         document.getElementById("level").innerText = "" + this.level;
         this.startGame();
+    }
+    timerReset() {
+        clearTimeout(this.timeoutId);
+        this.timeoutId = setTimeout(this.mainLoop.bind(this), this.gameSpeed);
     }
 }

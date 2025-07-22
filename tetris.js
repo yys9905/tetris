@@ -176,25 +176,24 @@ class Tetris {
     }
 
     mainLoop() {
-        if (this.gameStatus === "P") {
-            return;
-        }
-        if (this.currentBlock == null) {
-            if (!this.createNewBlock()) {
-                return;
+        if (this.gameStatus === "S") {
+            if (this.currentBlock == null) {
+                if (!this.createNewBlock()) {
+                    return;
+                }
+            } else {
+                this.fallBlock();
             }
-        } else {
-            this.fallBlock();
+            this.drawStage();
+            if (this.currentBlock != null) {
+                this.drawBlock(this.stageLeftPadding + this.blockX * this.cellSize,
+                    this.stageTopPadding + this.blockY * this.cellSize,
+                    this.currentBlock, this.blockAngle, this.stageCanvas);
+            }
+            if (this.gameStatus == "S"){
+                this.timeoutId = setTimeout(this.mainLoop.bind(this), this.gameSpeed);
+            }  
         }
-        this.drawStage();
-        if (this.currentBlock != null) {
-            this.drawBlock(this.stageLeftPadding + this.blockX * this.cellSize,
-                this.stageTopPadding + this.blockY * this.cellSize,
-                this.currentBlock, this.blockAngle, this.stageCanvas);
-        }
-        if (this.gameStatus == "S"){
-            this.timeoutId = setTimeout(this.mainLoop.bind(this), this.gameSpeed);
-        }   
     }
 
     createNewBlock() {

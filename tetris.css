@@ -61,3 +61,9 @@ html {
 .content {
     font-size: 12px;
 }
+@media (max-width: 800px) {
+  /* 오른쪽 내역 숨기기 */
+  td:last-child {
+    display: none;
+  }
+}

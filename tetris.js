@@ -394,12 +394,25 @@ class Tetris {
         }
     }
 
-    rotate() {
+    rotateR() {
         let newAngle;
         if (this.blockAngle < 3) {
             newAngle = this.blockAngle + 1;
         } else {
             newAngle = 0;
+        }
+        if (this.checkBlockMove(this.blockX, this.blockY, this.currentBlock, newAngle)) {
+            this.blockAngle = newAngle;
+            this.refreshStage();
+        }
+    }
+
+    rotateL() {
+        let newAngle;
+        if (this.blockAngle > 0) {
+            newAngle = this.blockAngle - 1;
+        } else {
+            newAngle = 3;
         }
         if (this.checkBlockMove(this.blockX, this.blockY, this.currentBlock, newAngle)) {
             this.blockAngle = newAngle;
